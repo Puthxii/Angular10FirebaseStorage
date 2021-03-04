@@ -38,10 +38,10 @@ export class FileUploadService {
 
   async saveFileAfs(fileUpload: FileUpload) {
     try {
-      (await this.afs.collection('upload').add({
+      await this.afs.collection('upload').add({
         url: fileUpload.url,
         name: fileUpload.name,
-      }))
+      })
     } catch (error) {
       console.log(error);
     }
