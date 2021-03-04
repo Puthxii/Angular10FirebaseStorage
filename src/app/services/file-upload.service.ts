@@ -4,14 +4,18 @@ import { AngularFireStorage } from '@angular/fire/storage';
 import { Observable } from 'rxjs';
 import { FileUpload } from '../models/file-upload.model';
 import { finalize } from 'rxjs/operators';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FileUploadService {
-  private basePath = '/uploads';
+  private basePath = `/uploads`;
 
-  constructor(private db: AngularFireDatabase, private storage: AngularFireStorage) { }
+  constructor(
+    private db: AngularFireDatabase,
+    private storage: AngularFireStorage,
+    private afs: AngularFirestore) { }
 
   pushFileToStorage(fileUpload: FileUpload): Observable<number> {
     const filePath = `${this.basePath}/${fileUpload.file.name}`;
@@ -32,6 +36,8 @@ export class FileUploadService {
   }
 
   private saveFileData(fileUpload: FileUpload): void {
+    console.log(this.basePath, fileUpload);
+    this.afs.collection('upload').doc().set(fileUpload)
     this.db.list(this.basePath).push(fileUpload);
   }
 
