@@ -28,6 +28,7 @@ export class FileUploadService {
           fileUpload.url = downloadURL;
           fileUpload.name = fileUpload.file.name;
           this.saveFileData(fileUpload);
+          this.saveFileAfs(fileUpload);
         });
       })
     ).subscribe();
@@ -35,9 +36,18 @@ export class FileUploadService {
     return uploadTask.percentageChanges();
   }
 
+  async saveFileAfs(fileUpload: FileUpload) {
+    try {
+      (await this.afs.collection('upload').add({
+        url: fileUpload.url,
+        name: fileUpload.name,
+      }))
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   private saveFileData(fileUpload: FileUpload): void {
-    console.log(this.basePath, fileUpload);
-    this.afs.collection('upload').doc().set(fileUpload)
     this.db.list(this.basePath).push(fileUpload);
   }
 
