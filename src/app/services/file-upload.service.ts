@@ -51,9 +51,8 @@ export class FileUploadService {
     this.db.list(this.basePath).push(fileUpload);
   }
 
-  getFiles(numberItems): AngularFireList<FileUpload> {
-    return this.db.list(this.basePath, ref =>
-      ref.limitToLast(numberItems));
+  getFiles(): AngularFireList<FileUpload> {
+    return this.db.list(this.basePath);
   }
 
   deleteFile(fileUpload: FileUpload): void {
